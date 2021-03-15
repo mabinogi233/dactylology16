@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.dactylology.LoginModule.Utils.Dao.Mapper.tokenMapper">
+  <resultMap id="BaseResultMap" type="com.king.dactylology.LoginModule.Utils.Dao.entity.token">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="tokenDeadTime" jdbcType="TIMESTAMP" property="tokendeadtime" />
+    <result column="tokenGetTime" jdbcType="TIMESTAMP" property="tokengettime" />
+    <result column="refreshTokenDeadTime" jdbcType="TIMESTAMP" property="refreshtokendeadtime" />
+    <result column="refreshToken" jdbcType="VARCHAR" property="refreshtoken" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, token, tokenDeadTime, tokenGetTime, refreshTokenDeadTime, refreshToken
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from token
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from token
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.king.dactylology.LoginModule.Utils.Dao.entity.token">
+    insert into token (id, token, tokenDeadTime, 
+      tokenGetTime, refreshTokenDeadTime, 
+      refreshToken)
+    values (#{id,jdbcType=INTEGER}, #{token,jdbcType=VARCHAR}, #{tokendeadtime,jdbcType=TIMESTAMP}, 
+      #{tokengettime,jdbcType=TIMESTAMP}, #{refreshtokendeadtime,jdbcType=TIMESTAMP}, 
+      #{refreshtoken,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.king.dactylology.LoginModule.Utils.Dao.entity.token">
+    insert into token
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="tokendeadtime != null">
+        tokenDeadTime,
+      </if>
+      <if test="tokengettime != null">
+        tokenGetTime,
+      </if>
+      <if test="refreshtokendeadtime != null">
+        refreshTokenDeadTime,
+      </if>
+      <if test="refreshtoken != null">
+        refreshToken,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="tokendeadtime != null">
+        #{tokendeadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tokengettime != null">
+        #{tokengettime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refreshtokendeadtime != null">
+        #{refreshtokendeadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refreshtoken != null">
+        #{refreshtoken,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.king.dactylology.LoginModule.Utils.Dao.entity.token">
+    update token
+    <set>
+      <if test="token != null">
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="tokendeadtime != null">
+        tokenDeadTime = #{tokendeadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tokengettime != null">
+        tokenGetTime = #{tokengettime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refreshtokendeadtime != null">
+        refreshTokenDeadTime = #{refreshtokendeadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refreshtoken != null">
+        refreshToken = #{refreshtoken,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.king.dactylology.LoginModule.Utils.Dao.entity.token">
+    update token
+    set token = #{token,jdbcType=VARCHAR},
+      tokenDeadTime = #{tokendeadtime,jdbcType=TIMESTAMP},
+      tokenGetTime = #{tokengettime,jdbcType=TIMESTAMP},
+      refreshTokenDeadTime = #{refreshtokendeadtime,jdbcType=TIMESTAMP},
+      refreshToken = #{refreshtoken,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByToken" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from token
+    where token = #{token,jdbcType=VARCHAR}
+  </select>
+
+  <select id="MaxId" resultType="java.lang.Integer">
+     select max(id) from appusers
+  </select>
+
+</mapper>
