@@ -85,6 +85,7 @@
     <include refid="Base_Column_List" />
     from resource
     where word like "%"#{word,jdbcType=INTEGER}"%"
+    ORDER BY LENGTH(word)
   </select>
 
   <select id="MaxId" resultType="java.lang.Integer">

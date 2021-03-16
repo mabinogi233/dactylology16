@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -20,7 +21,7 @@ public class ResourceService {
     resourceMapper mapper;
 
     //资源存储路径
-    private static final String rootPath = "D:\\试验田\\resources";
+    private static final String rootPath = "/www/wwwroot/dactylology.frogking.cn/ResourceSpace";
 
     //分隔符
     private static final String sepa = java.io.File.separator;
@@ -30,12 +31,18 @@ public class ResourceService {
      * @param word
      * @return
      */
-    public int selectResouceIdByWord(String word){
+    public List<Integer> selectResouceIdByWord(String word){
+
         try {
+            List<Integer> rList = new ArrayList<>();
             if (word != null) {
                 List<resource> resources = mapper.selectResourceByWord(word);
                 if (resources != null && resources.size() > 0) {
-
+                    for(resource rs:resources){
+                        rList.add(rs.getId());
+                    }
+                    return rList;
+                    /*
                     if (resources.size() > 1) {
                         //同名资源随机选择
                         Random random = new Random();
@@ -45,12 +52,20 @@ public class ResourceService {
                         //只有一个资源时返回
                         return resources.get(0).getId();
                     }
+                    */
+                }else{
+                    rList.add(-1);
+                    return rList;
                 }
+            }else{
+                rList.add(-1);
+                return rList;
             }
-            return -1;
         }catch (Exception e){
             e.printStackTrace();
-            return -1;
+            List<Integer> rList = new ArrayList<>();
+            rList.add(-1);
+            return rList;
         }
     }
 
@@ -115,6 +130,20 @@ public class ResourceService {
      */
     public List<Integer> getAllResourceId(){
         return mapper.getAll();
+    }
+
+
+    /**
+     * 根据id获取资源名称
+     * @param id
+     * @return
+     */
+    public String selectNameById(int id){
+        if(mapper.selectByPrimaryKey(id)!=null){
+            return mapper.selectByPrimaryKey(id).getWord();
+        }else{
+            return null;
+        }
     }
 
 }

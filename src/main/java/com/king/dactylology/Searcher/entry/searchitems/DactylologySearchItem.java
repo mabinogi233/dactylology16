@@ -39,12 +39,28 @@ public class DactylologySearchItem extends SearchItem {
     @Override
     public List<Answer> search(Question question) {
         String word = question.getSelectSentence();
-        int fid = resourceService.selectResouceIdByWord(word);
-        if(fid!=-1) {
+        List<Integer> fids = resourceService.selectResouceIdByWord(word);
+        if(fids!=null) {
             List<Answer> answers = new ArrayList<>();
             Answer answer = new Answer();
             answer.setIntroduction(word);
-            answer.setUrl(String.valueOf(fid));
+
+            StringBuilder fidStr = new StringBuilder();
+            boolean hasKeyWord = false;
+            for(int fid:fids) {
+                //拥有关键词
+                if (resourceService.selectNameById(fid)!=null && resourceService.selectNameById(fid).equals(word)){
+                    hasKeyWord = true;
+                }
+                fidStr.append(fid);
+                fidStr.append(",");
+            }
+            fidStr.deleteCharAt(fidStr.length()-1);
+            if(hasKeyWord) {
+                answer.setUrl(String.valueOf(fidStr));
+            }else {
+                answer.setUrl("-1");
+            }
             answers.add(answer);
             return answers;
         }else {
@@ -55,13 +71,31 @@ public class DactylologySearchItem extends SearchItem {
             if(simWords!=null){
                 for(Map.Entry<String, Float> map:simWords) {
                     //近义词查询成功
-                    int sim_fid = resourceService.selectResouceIdByWord(map.getKey());
-                    if(sim_fid!=-1){
+                    List<Integer> sim_fids = resourceService.selectResouceIdByWord(map.getKey());
+                    if(sim_fids!=null){
                         List<Answer> answers = new ArrayList<>();
+
                         Answer answer = new Answer();
                         answer.setIntroduction(word);
-                        answer.setUrl(String.valueOf(sim_fid));
-                        answers.add(answer);
+
+                        StringBuilder fidStr = new StringBuilder();
+                        boolean hasKeyWord = false;
+
+                        for(int sim_fid:sim_fids) {
+                            //拥有关键词
+                            if (resourceService.selectNameById(sim_fid)!=null && resourceService.selectNameById(sim_fid).equals(map.getKey())){
+                                hasKeyWord = true;
+                            }
+                            fidStr.append(sim_fid);
+                            fidStr.append(",");
+                        }
+                        fidStr.deleteCharAt(fidStr.length()-1);
+
+                        if(hasKeyWord) {
+                            answer.setUrl(String.valueOf(fidStr));
+                        }else {
+                            answer.setUrl("-1");
+                        }
                         return answers;
                     }
                 }
