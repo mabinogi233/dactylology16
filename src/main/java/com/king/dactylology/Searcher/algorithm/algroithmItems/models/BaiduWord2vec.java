@@ -14,9 +14,9 @@ import java.util.List;
 //使用百度API计算文本相似度
 public class BaiduWord2vec extends Word2vec {
 
-    private static final String APP_ID = "23590155";
-    private static final String API_KEY = "LyL6QN0eXOxT5wGfdQppRbFh";
-    private static final String SECRET_KEY = "OVPpqNmm7L25HRItFv5KtTZVYVnNLRKK";
+    private static final String APP_ID = "";
+    private static final String API_KEY = "";
+    private static final String SECRET_KEY = "";
 
 
     //计算文本相似度

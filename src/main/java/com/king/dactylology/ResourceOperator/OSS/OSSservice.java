@@ -39,10 +39,10 @@ public class OSSservice {
     wordTextMapper wordMapper;
 
     //OSS服务器参数
-    private static final String endpoint ="oss-cn-beijing.aliyuncs.com";
-    private static final String accessKeyId= "LTAIqE1ewqnPJPg7";
-    private static final String secretAccessKey="zPiapnIblodMLQkEG0pufOMQLNsC7E";
-    private static final String bucketName="dactylology";
+    private static final String endpoint ="";
+    private static final String accessKeyId= "";
+    private static final String secretAccessKey="";
+    private static final String bucketName="";
     //URL失效时间
     private static final int hours = 365*24;
 
