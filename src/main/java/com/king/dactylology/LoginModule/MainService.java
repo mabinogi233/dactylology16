@@ -70,6 +70,26 @@ public class MainService {
                     rMap.put("token", "");
                     return JSONObject.toJSONString(rMap);
                 }
+            } else if(type.equals("2")){
+                LoginItem loginItem = loginFactory.getItem("code");
+
+                //执行登录操作，返回错误码
+                String code = loginItem.login(id, password);
+                //登录成功
+                if (code.equals("000")) {
+                    //获取token
+                    String token = quickSql.selectTokenById(id, type);
+                    Map<String, String> rMap = new HashMap<>();
+                    rMap.put("code", code);
+                    rMap.put("token", token);
+                    return JSONObject.toJSONString(rMap);
+                } else {
+                    //登录失败
+                    Map<String, String> rMap = new HashMap<>();
+                    rMap.put("code", code);
+                    rMap.put("token", "");
+                    return JSONObject.toJSONString(rMap);
+                }
             } else {
                 LoginItem loginItem = loginFactory.getItem("oauth");
                 int newId = quickSql.createId();

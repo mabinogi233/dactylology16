@@ -2,12 +2,15 @@ package com.king.dactylology.ResourceOperator;
 
 
 import com.king.dactylology.ResourceOperator.Dao.Mapper.resourceMapper;
+import com.king.dactylology.ResourceOperator.Dao.entity.ossFile;
 import com.king.dactylology.ResourceOperator.Dao.entity.resource;
+import com.king.dactylology.ResourceOperator.OSS.OSSservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -20,11 +23,16 @@ public class ResourceService {
     @Autowired
     resourceMapper mapper;
 
+
+    @Autowired
+    OSSservice osSservice;
+
     //资源存储路径
     private static final String rootPath = "/www/wwwroot/dactylology.frogking.cn/ResourceSpace";
 
     //分隔符
     private static final String sepa = java.io.File.separator;
+
 
     /**
      * 根据名称获取资源的id
@@ -118,6 +126,9 @@ public class ResourceService {
                 res.setWord(name);
                 res.setFilepath(realPath);
                 mapper.insert(res);
+                //上传到OSS
+                osSservice.upLoadFileToOSSService(realPath,fid);
+
             }
 
         }

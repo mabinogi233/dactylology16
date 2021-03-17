@@ -106,7 +106,7 @@ public class DactylologyController {
                 fileService.deleteAllFilesByToken(token);
                 return result.toJSONString();
             } else {
-                //出错，返回状态码
+                //token错误
                 Map<String, String> rMap = new HashMap<>();
                 rMap.put("code", com.king.dactylology.LoginModule.Utils.Code.TokenError.getCode());
                 rMap.put("item", "");
@@ -158,7 +158,7 @@ public class DactylologyController {
                 result.put("item",items);
                 return result.toJSONString();
             } else {
-                //出错，返回状态码
+                //token错误
                 Map<String, String> rMap = new HashMap<>();
                 rMap.put("code", com.king.dactylology.LoginModule.Utils.Code.TokenError.getCode());
                 rMap.put("item", "");
@@ -189,14 +189,23 @@ public class DactylologyController {
     @RequestMapping("/transfor3")
     @ResponseBody
     public String getAll(@RequestParam("token") String token){
-        if (token != null && loginService.checkToken(token)) {
-            List<Integer> rList = resourceService.getAllResourceId();
-            //出错，返回状态码
-            Map<String, Object> rMap = new HashMap<>();
-            rMap.put("code", Code.TransforSuccess.getCode());
-            rMap.put("item", rList);
-            return JSONObject.toJSONString(rMap);
-        }else{
+        try {
+            if (token != null && loginService.checkToken(token)) {
+                List<Integer> rList = resourceService.getAllResourceId();
+                //出错，返回状态码
+                Map<String, Object> rMap = new HashMap<>();
+                rMap.put("code", Code.TransforSuccess.getCode());
+                rMap.put("item", rList);
+                return JSONObject.toJSONString(rMap);
+            } else {
+                //token错误
+                Map<String, String> rMap = new HashMap<>();
+                rMap.put("code", com.king.dactylology.LoginModule.Utils.Code.TokenError.getCode());
+                rMap.put("item", "");
+                return JSONObject.toJSONString(rMap);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
             //出错，返回状态码
             Map<String, String> rMap = new HashMap<>();
             rMap.put("code", Code.TransforError.getCode());

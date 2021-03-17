@@ -28,6 +28,9 @@ public class LoginController {
      * @param id type=1时，id为手机号 type不为1时，id无效
      * @param password type=1时，password为密码，type不为1时，password为oauth2.0中的code
      * @return 返回json字符串，有两个字段：code和token，code为状态码，token仅在code=000时有效
+     *
+     * update type=2时为验证码登录，此时id为手机号，password为验证码
+     *
      * code参数的更多含义见com.king.dactylology.LoginModule.Utils.Code
      */
     @RequestMapping("login")

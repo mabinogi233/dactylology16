@@ -28,13 +28,13 @@ public class QuickSql {
     userMapper myUserMapper;
 
     /**
-     * type==1时id为手机号，type不为1时为token的主键
+     * type==1或2时id为手机号，type不为1,2时为token的主键
      * @param id
      * @param type
      * @return
      */
     public String selectTokenById(String id,String type){
-        if(type.equals("1")){
+        if(type.equals("1")||type.equals("2")){
             int Tid = myUserMapper.selectByPhoneNumber(id).getId();
             return myTokenMapper.selectByPrimaryKey(Tid).getToken();
         }else{

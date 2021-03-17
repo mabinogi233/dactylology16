@@ -20,6 +20,9 @@ public class BaseLoginFactory implements LoginFactoryInterFace {
         if(Iid.equals("base")){
             return (LoginItem) utils.getBean("simpleLogin");
         }
+        if(Iid.equals("code")){
+            return (LoginItem) utils.getBean("codeLogin");
+        }
         if(Iid.equals("oauth")){
             return (LoginItem) utils.getBean("simpleOauthLogin");
         }
