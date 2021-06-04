@@ -44,18 +44,22 @@ public class runModel {
             String filePath = newPackageName;
             String command = pythonExe + " " + modelPath + " " + filePath;
             StringBuilder result = new StringBuilder();
+            System.out.println("开始运行py模型");
             try {
                 //运行
                 Process p = Runtime.getRuntime().exec(command);
+                System.out.println("py模型执行完毕");
                 //读取输出
                 BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "gbk"));
                 String buff;
                 while ((buff = br.readLine()) != null) {
                     result.append(buff);
                 }
+                System.out.println("结束运行py模型");
                 return result.toString();
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("py模型运行异常");
                 return "";
             }
         }

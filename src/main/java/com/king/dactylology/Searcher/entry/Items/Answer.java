@@ -15,6 +15,8 @@ public class Answer extends Item {
     String source;
     //相似度
     double sim;
+    //域，存储自定义对象
+    Object memory;
 
     public double getSim() {
         return sim;
@@ -54,5 +56,13 @@ public class Answer extends Item {
 
     public void setSim(double sim) {
         this.sim = sim;
+    }
+
+    public Object getMemory() {
+        return memory;
+    }
+
+    public void setMemory(Object memory) {
+        this.memory = memory;
     }
 }

@@ -93,14 +93,14 @@ public class Check {
     private void doSendMessageByTencent(String phoneNum,String code){
         try {
             //CAM 密钥查询：https://console.cloud.tencent.com/cam/capi
-            String secretId = "";
-            String secretKey = "";
+            String secretId = "AKIDiccBVcp6SxxkFCHiHcgh3AWcpoWx9H8O";
+            String secretKey = "83vWeZHisJYYKp7C1uYyA6rdAPOC3ez4";
             //短信应用 ID: 在 [短信控制台] 添加应用后生成的实际 SDKAppID，例如1400006666
-            String appid = "";
+            String appid = "1400494731";
             /* 短信签名内容: 使用 UTF-8 编码，必须填写已审核通过的签名，可登录 [短信控制台] 查看签名信息 */
-            String sign = "";
+            String sign = "LWZ的小站";
             /* 模板 ID: 必须填写已审核通过的模板 ID，可登录 [短信控制台] 查看模板 ID */
-            String templateID = "";
+            String templateID = "889195";
 
             /* 必要步骤：
              * 实例化一个认证对象，入参需要传入腾讯云账户密钥对 secretId 和 secretKey

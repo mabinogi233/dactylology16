@@ -9,7 +9,9 @@ import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfigura
 import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
-@MapperScan({"com.king.dactylology.LoginModule.Utils.Dao.Mapper","com.king.dactylology.ResourceOperator.Dao.Mapper"})
+@MapperScan({"com.king.dactylology.LoginModule.Utils.Dao.Mapper"
+            ,"com.king.dactylology.ResourceOperator.Dao.Mapper"
+            ,"com.king.dactylology.UserDataBase.DAO.Mapper"})
 
 public class DactylologyApplication {
 

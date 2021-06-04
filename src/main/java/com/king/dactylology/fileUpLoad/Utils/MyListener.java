@@ -23,7 +23,7 @@ public class MyListener implements ProgressListener {
     @Override
     public void update(long l, long l1, int i) {
         //计算当前上传的百分比
-        double percent = (double) ((double)l*100.0/l1 );
+        double percent = (double) ((double)l*100.0/(double)l1 );
         session.setAttribute("uploadPercent", percent);
     }
 }

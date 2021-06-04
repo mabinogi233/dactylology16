@@ -39,12 +39,12 @@ public class OSSservice {
     wordTextMapper wordMapper;
 
     //OSS服务器参数
-    private static final String endpoint ="";
-    private static final String accessKeyId= "";
-    private static final String secretAccessKey="";
-    private static final String bucketName="";
+    private static final String endpoint ="oss-cn-beijing.aliyuncs.com";
+    private static final String accessKeyId= "LTAIqE1ewqnPJPg7";
+    private static final String secretAccessKey="zPiapnIblodMLQkEG0pufOMQLNsC7E";
+    private static final String bucketName="dactylology";
     //URL失效时间
-    private static final int hours = 365*24;
+    public static final int hours = 365*24;
 
     /**
      * 从OSS服务器获取OSS文件的URL
@@ -73,7 +73,7 @@ public class OSSservice {
      * 上传文件至OSS服务器
      * @param filePath 文件绝对路径
      */
-    public void upLoadFileToOSSService(String filePath,int id){
+    public void upLoadFileToOSSService(String filePath,int id,String type){
         try{
             OSS ossClient = this.createOSSclient();
             InputStream inputStream = new FileInputStream(filePath);
@@ -83,15 +83,26 @@ public class OSSservice {
             //关闭
             ossClient.shutdown();
             //更新数据库
-
+            System.out.println("上传结束");
             String url = this.getURLFromOSSService(filePathWindows);
-            ossFile os1 = new ossFile();
-            os1.setDeaddate(utils.addDateHour(new Date(), hours));
-            os1.setUrl(url);
-            os1.setId(id);
+
             if(OSSMapper.selectByPrimaryKey(id)==null) {
+                ossFile os1 = new ossFile();
+                os1.setId(id);
+                os1.setDeaddate(utils.addDateHour(new Date(), hours));
+                if(type.equals("pic")) {
+                    os1.setUrlpic(url);
+                }else{
+                    os1.setUrlmovie(url);
+                }
                 OSSMapper.insert(os1);
             }else {
+                ossFile os1 = OSSMapper.selectByPrimaryKey(id);
+                if(type.equals("pic")) {
+                    os1.setUrlpic(url);
+                }else{
+                    os1.setUrlmovie(url);
+                }
                 OSSMapper.updateByPrimaryKey(os1);
             }
 
@@ -127,16 +138,20 @@ public class OSSservice {
                 //失效时间小于当前时间，表示已失效
                 if (deadDate.before(new Date())) {
                     //重新获取URL
-                    String newUrl = this.getURLFromOSSService(filelMapper.selectByPrimaryKey(fid).getFilepath());
+                    String newUrl1 = this.getURLFromOSSService(filelMapper.selectByPrimaryKey(fid).getFilepathpic());
+                    String newUrl2 = this.getURLFromOSSService(filelMapper.selectByPrimaryKey(fid).getFilepathmovie());
                     //更新数据条目
-                    of1.setUrl(newUrl);
+                    of1.setUrlpic(newUrl1);
+                    of1.setUrlmovie(newUrl2);
                     of1.setDeaddate(utils.addDateHour(new Date(), hours));
                     //更新数据库
                     OSSMapper.updateByPrimaryKey(of1);
                     return true;
                 } else {
                     //未失效,验证本地文件是否存在
-                    if (filelMapper.selectByPrimaryKey(fid) != null && filelMapper.selectByPrimaryKey(fid).getFilepath() != null) {
+                    if (filelMapper.selectByPrimaryKey(fid) != null
+                            && filelMapper.selectByPrimaryKey(fid).getFilepathpic() != null
+                            && filelMapper.selectByPrimaryKey(fid).getFilepathmovie() != null) {
                         return true;
                     }else{
                         return false;
@@ -153,18 +168,44 @@ public class OSSservice {
 
 
     /**
-     * 根据id获取资源的URL
+     * 根据id获取图片资源的URL
      * @param fid 文件fid
      * @return
      */
-    public String getUrlById(int fid){
+    public String getUrlPicById(int fid){
         try {
             if (check(fid)) {
                 //验证成功
                 ossFile of1 = OSSMapper.selectByPrimaryKey(fid);
                 if (of1 != null) {
                     //返回URL
-                    return of1.getUrl();
+                    return of1.getUrlpic();
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * 根据id获取视频资源的URL
+     * @param fid 文件fid
+     * @return
+     */
+    public String getUrlMovById(int fid){
+        try {
+            if (check(fid)) {
+                //验证成功
+                ossFile of1 = OSSMapper.selectByPrimaryKey(fid);
+                if (of1 != null) {
+                    //返回URL
+                    return of1.getUrlmovie();
                 } else {
                     return null;
                 }
@@ -193,6 +234,42 @@ public class OSSservice {
      */
     private String replaceOp(String unixFilePath){
         return unixFilePath.replace("/","");
+    }
+
+
+    //以下为对外接口
+
+    /**
+     * 上传头像文件
+     * @param filePath
+     * @param fileName
+     */
+    public void uploadHeadPic(String filePath,String fileName){
+        try {
+            OSS ossClient = this.createOSSclient();
+            InputStream inputStream = new FileInputStream(filePath);
+            //上传图片，第一个参数为bucketName,第二个参数key为上传的文件路径名称，第三个为InputStream
+            ossClient.putObject(bucketName, fileName, inputStream);
+            //关闭
+            ossClient.shutdown();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取头像url
+     * @param fileName
+     * @return
+     */
+    public String getHeadPic(String fileName){
+        // 创建OSSClient实例。
+        OSS ossClient = this.createOSSclient();
+        //失效时间
+        Date expiration = utils.addDateHour(new Date(),hours);
+        // 生成URL，第一个参数为bucketName，第二个参数key为上传的文件路径名称，第三个为过期时间
+        URL url = ossClient.generatePresignedUrl(bucketName, fileName, expiration);
+        return url.toString().split("\\?")[0];
     }
 
 }

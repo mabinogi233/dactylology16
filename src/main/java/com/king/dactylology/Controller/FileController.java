@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -47,6 +49,31 @@ public class FileController {
             return JSONObject.toJSONString(rMap);
         }
     }
+
+    /**
+     * 上传文件，参数同上
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/uploadFileNew")
+    public String upFileNew(HttpServletRequest request){
+        System.out.println("上传文件");
+        try {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            MultipartFile file = multipartRequest.getFile("file");
+            String token = multipartRequest.getParameter("token");
+            String fileName = multipartRequest.getParameter("fileName");
+            System.out.println("开始传输文件");
+            return fileServices.uploadFile(file, token, fileName);
+        }catch (Exception e){
+            Map<String,String> rMap = new HashMap<>();
+            rMap.put("code", Code.ServiceError.getCode());
+            System.out.println("传输文件异常");
+            return JSONObject.toJSONString(rMap);
+        }
+    }
+
 
     //进度获取
     /**

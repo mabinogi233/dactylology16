@@ -5,10 +5,11 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="word" jdbcType="VARCHAR" property="word" />
-    <result column="filepath" jdbcType="VARCHAR" property="filepath" />
+    <result column="filepathPic" jdbcType="VARCHAR" property="filepathpic" />
+    <result column="filepathMovie" jdbcType="VARCHAR" property="filepathmovie" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, type, word, filepath
+    id, type, word, filepathPic, filepathMovie
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -22,9 +23,9 @@
   </delete>
   <insert id="insert" parameterType="com.king.dactylology.ResourceOperator.Dao.entity.resource">
     insert into resource (id, type, word, 
-      filepath)
+      filepathPic, filepathMovie)
     values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{word,jdbcType=VARCHAR}, 
-      #{filepath,jdbcType=VARCHAR})
+      #{filepathpic,jdbcType=VARCHAR}, #{filepathmovie,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.king.dactylology.ResourceOperator.Dao.entity.resource">
     insert into resource
@@ -38,8 +39,11 @@
       <if test="word != null">
         word,
       </if>
-      <if test="filepath != null">
-        filepath,
+      <if test="filepathpic != null">
+        filepathPic,
+      </if>
+      <if test="filepathmovie != null">
+        filepathMovie,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -52,8 +56,11 @@
       <if test="word != null">
         #{word,jdbcType=VARCHAR},
       </if>
-      <if test="filepath != null">
-        #{filepath,jdbcType=VARCHAR},
+      <if test="filepathpic != null">
+        #{filepathpic,jdbcType=VARCHAR},
+      </if>
+      <if test="filepathmovie != null">
+        #{filepathmovie,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -66,8 +73,11 @@
       <if test="word != null">
         word = #{word,jdbcType=VARCHAR},
       </if>
-      <if test="filepath != null">
-        filepath = #{filepath,jdbcType=VARCHAR},
+      <if test="filepathpic != null">
+        filepathPic = #{filepathpic,jdbcType=VARCHAR},
+      </if>
+      <if test="filepathmovie != null">
+        filepathMovie = #{filepathmovie,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -76,9 +86,11 @@
     update resource
     set type = #{type,jdbcType=VARCHAR},
       word = #{word,jdbcType=VARCHAR},
-      filepath = #{filepath,jdbcType=VARCHAR}
+      filepathPic = #{filepathpic,jdbcType=VARCHAR},
+      filepathMovie = #{filepathmovie,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 
   <select id="selectResourceByWord" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
@@ -89,15 +101,15 @@
   </select>
 
   <select id="MaxId" resultType="java.lang.Integer">
-     select max(id) from resource
+            select max(id) from resource
   </select>
 
   <delete id="deleteAll" >
-    delete from resource
+      delete from resource
   </delete>
 
   <select id="getAll" resultType="java.lang.Integer">
-     select id from resource
+    select id from resource
   </select>
 
 

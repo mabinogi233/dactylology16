@@ -51,6 +51,15 @@ public class ResourceController {
     }
 
     /**
+     * 更新词意解释数据库，后端管理使用
+     */
+    @RequestMapping("/updateWordText")
+    @ResponseBody
+    public void insertWordText(){
+        resourceService.insertWordText();
+    }
+
+    /**
      * 根据fid下载资源，返回Resource格式资源
      * @param fid
      * @param token
@@ -58,12 +67,18 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping("/resource1")
-    public Resource getAsResource(@RequestParam("fid") String fid,@RequestParam("token")String token) {
+    public Resource getAsResource(@RequestParam("fid") String fid,@RequestParam("type")String type,@RequestParam("token")String token) {
         //验证token
         if(!loginService.checkToken(token)){
             return null;
         }
-        String filePath = resourceService.selectResoucePathById(Integer.parseInt(fid));
+        String filePath = null;
+        if(type.equals("pic")) {
+            filePath = resourceService.selectResoucePicPathById(Integer.parseInt(fid));
+        }
+        if(type.equals("mov")){
+            filePath = resourceService.selectResouceMovPathById(Integer.parseInt(fid));
+        }
         if(filePath==null){
             return null;
         }
@@ -79,13 +94,20 @@ public class ResourceController {
      */
     @RequestMapping("/resource2")
     @ResponseBody
-    public void getAsByte(HttpServletResponse response, @RequestParam("fid") String fid,@RequestParam("token")String token){
+    public void getAsByte(HttpServletResponse response, @RequestParam("type")String type,@RequestParam("fid") String fid,@RequestParam("token")String token){
         //验证token
         if(!loginService.checkToken(token)){
             return;
         }
 
-        String filePath = resourceService.selectResoucePathById(Integer.parseInt(fid));
+        String filePath = null;
+        if(type.equals("pic")) {
+            filePath = resourceService.selectResoucePicPathById(Integer.parseInt(fid));
+        }
+        if(type.equals("mov")){
+            filePath = resourceService.selectResouceMovPathById(Integer.parseInt(fid));
+        }
+
         String filename = fid;
         if(filePath==null){
             return;
@@ -117,7 +139,18 @@ public class ResourceController {
 
     }
 
-
+    /**
+     * 获取资源url
+     * @param fid 资源主键
+     * @param token token
+     * @return 返回示例：
+     * {"code":"300",
+     * "urlPic":"http://dactylology.oss-cn-beijing.aliyuncs.com/D%3A%5C%E8%AF%95%E9%AA%8C%E7%94%B0%5Cresources%5Cpic%5C%E6%B5%8B%E8%AF%95.jpg",
+     * "pos":"adv",
+     * "urlMov":"http://dactylology.oss-cn-beijing.aliyuncs.com/D%3A%5C%E8%AF%95%E9%AA%8C%E7%94%B0%5Cresources%5Cmov%5C%E6%B5%8B%E8%AF%95.mp4",
+     * "text":"测试一下而已",
+     * "word":"测试"}
+     */
     @RequestMapping("/resource3")
     @ResponseBody
     public String getByOSS(@RequestParam("fid") String fid,@RequestParam("token")String token){
@@ -127,18 +160,24 @@ public class ResourceController {
                 //出错，返回状态码
                 Map<String, String> rMap = new HashMap<>();
                 rMap.put("code", com.king.dactylology.LoginModule.Utils.Code.TokenError.getCode());
-                rMap.put("url", "");
+                rMap.put("urlPic", "");
+                rMap.put("word", "");
+                rMap.put("urlMov", "");
                 rMap.put("text", "");
                 rMap.put("pos", "");
                 return JSONObject.toJSONString(rMap);
             } else {
-                String url = osSservice.getUrlById(Integer.parseInt(fid));
+                String url1 = osSservice.getUrlPicById(Integer.parseInt(fid));
+                String url2 = osSservice.getUrlMovById(Integer.parseInt(fid));
                 //成功
                 Map<String, String> rMap = new HashMap<>();
                 wordText wt = osSservice.getWordText(Integer.parseInt(fid));
+                String word = resourceService.selectNameById(Integer.parseInt(fid));
                 if (wt != null) {
                     rMap.put("code", Code.ResourceGetSuccess.getCode());
-                    rMap.put("url", url.split("\\?")[0]);
+                    rMap.put("urlPic", url1.split("\\?")[0]);
+                    rMap.put("urlMov", url2.split("\\?")[0]);
+                    rMap.put("word", word);
                     rMap.put("text", wt.getText());
                     rMap.put("pos", wt.getPos());
                 }
@@ -149,7 +188,9 @@ public class ResourceController {
             //出错，返回状态码
             Map<String, String> rMap = new HashMap<>();
             rMap.put("code", Code.ResourceNotFind.getCode());
-            rMap.put("url", "");
+            rMap.put("urlPic", "");
+            rMap.put("urlMov", "");
+            rMap.put("word", "");
             rMap.put("text", "");
             rMap.put("pos", "");
             return JSONObject.toJSONString(rMap);

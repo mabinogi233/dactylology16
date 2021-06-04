@@ -18,7 +18,7 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!-- 生成模型的包名和位置-->
-        <javaModelGenerator targetPackage="com.king.dactylology.ResourceOperator.Dao.entity" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.king.dactylology.UserDataBase.DAO.entity" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -27,13 +27,14 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!-- 生成DAO的包名和位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.king.dactylology.ResourceOperator.Dao.Mapper" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.king.dactylology.UserDataBase.DAO.Mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
         <!-- 注意：已生成的不要再生成，不然会覆盖已生成的文件 -->
         <!-- -->
-        <table tableName="wordText" domainObjectName="wordText" enableCountByExample="false"
+
+        <table tableName="userinformation" domainObjectName="userinformation" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"/>
 

@@ -7,7 +7,9 @@ public class resource {
 
     private String word;
 
-    private String filepath;
+    private String filepathpic;
+
+    private String filepathmovie;
 
     public Integer getId() {
         return id;
@@ -33,11 +35,19 @@ public class resource {
         this.word = word == null ? null : word.trim();
     }
 
-    public String getFilepath() {
-        return filepath;
+    public String getFilepathpic() {
+        return filepathpic;
     }
 
-    public void setFilepath(String filepath) {
-        this.filepath = filepath == null ? null : filepath.trim();
+    public void setFilepathpic(String filepathpic) {
+        this.filepathpic = filepathpic == null ? null : filepathpic.trim();
+    }
+
+    public String getFilepathmovie() {
+        return filepathmovie;
+    }
+
+    public void setFilepathmovie(String filepathmovie) {
+        this.filepathmovie = filepathmovie == null ? null : filepathmovie.trim();
     }
 }

@@ -72,6 +72,7 @@ public class DactylologyController {
     @RequestMapping("/transfor1")
     @ResponseBody
     public String Vedio2String(@RequestParam("token")String token){
+
         try {
             //验证token
             if (token != null && loginService.checkToken(token)) {
@@ -120,6 +121,7 @@ public class DactylologyController {
             rMap.put("item", "");
             return JSONObject.toJSONString(rMap);
         }
+
     }
 
     /**
